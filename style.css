@@ -63,6 +63,11 @@ body {
     cursor: pointer;
     font-weight: bolder;
     font-size: 16px;
+    transition: transform 0.1s ease;
+}
+
+.content button:active {
+    transform: scale(0.97);
 }
 
 .content .result-details {
