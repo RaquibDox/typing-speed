@@ -26,6 +26,8 @@ function initTyping() {
     console.log("wrong");
   }
   charIndex++;
+  characters[charIndex].classList.add("active");
+  typing();
 }
 
 inpField.addEventListener("input", initTyping);
@@ -33,3 +35,9 @@ window.addEventListener("DOMContentLoaded", () => {
   inpField.value = "";
   randomParagraph();
 });
+
+const audio = new Audio("one click.mp3");
+
+function typing() {
+  audio.play();
+}
