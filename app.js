@@ -1,18 +1,27 @@
-const typingText = document.querySelector(".typing-text p");
-inpField = document.querySelector(".input-field");
-mistakeTag = document.querySelector(".mistake span");
-timerTag = document.querySelector(".time span b");
+const typingText = document.querySelector(".typing-text p"),
+  inpField = document.querySelector(".input-field"),
+  mistakeTag = document.querySelector(".mistake span"),
+  timerTag = document.querySelector(".time span b"),
+  wpmTag = document.querySelector(".wpm span"),
+  cpmTag = document.querySelector(".cpm span"),
+  tryAgainBtn = document.querySelector("button");
 
-let maxTime = 60;
-let timerStarted = false;
-let charIndex = (mistakes = lastInputIndex = 0);
+const audio = new Audio("one click.mp3");
+
+let maxTime = 60,
+  interval,
+  timeLeft = maxTime,
+  timerStarted = false,
+  charIndex = (mistakes = lastInputIndex = words = 0);
 
 function randomParagraph() {
   let randIndex = Math.floor(Math.random() * paragraphs.length);
+  typingText.innerHTML = "";
   paragraphs[randIndex].split("").forEach((span) => {
     let spanTag = `<span>${span}</span>`;
     typingText.innerHTML += spanTag;
   });
+  typingText.querySelectorAll("span")[0].classList.add("active");
   document.addEventListener("keydown", () => inpField.focus());
   typingText.addEventListener("click", () => inpField.focus());
 }
@@ -23,7 +32,6 @@ function initTyping() {
     startTimer();
     timerStarted = true;
   }
-  typing();
 
   const characters = typingText.querySelectorAll("span");
   let typedChar = inpField.value.split("")[lastInputIndex];
@@ -52,27 +60,56 @@ function initTyping() {
   //moving the text cursor
   characters.forEach((span) => span.classList.remove("active"));
   characters[charIndex].classList.add("active");
+  let wpm = Math.round(
+    ((charIndex - mistakes) / 5 / (maxTime - timeLeft)) * 60
+  );
+  wpm = wpm < 0 || !wpm || wpm === Infinity ? 0 : wpm;
+
   mistakeTag.innerText = mistakes;
+  cpmTag.innerText = charIndex - mistakes;
+  wpmTag.innerText = wpm;
 }
-
-inpField.addEventListener("input", initTyping);
-window.addEventListener("DOMContentLoaded", () => {
-  inpField.value = "";
-  randomParagraph();
-});
-
-const audio = new Audio("one click.mp3");
 
 function typing() {
   audio.play();
 }
 
 function startTimer() {
-  let interval = setInterval(() => {
-    if (maxTime === 1) {
+  interval = setInterval(() => {
+    if (timeLeft <= 1) {
+      offTimer = false;
       clearInterval(interval);
+      inpField.value = "";
     }
-    maxTime--;
-    timerTag.innerText = maxTime;
+    timeLeft--;
+    timerTag.innerText = timeLeft;
   }, 1000);
 }
+
+function resetGame() {
+  randomParagraph();
+  timeLeft = maxTime;
+  timerStarted = false;
+  clearInterval(interval);
+  charIndex = mistakes = lastInputIndex = words = 0;
+  timerTag.innerText = timeLeft;
+  mistakeTag.innerText = mistakes;
+  wpmTag.innerText = 0;
+  cpmTag.innerText = 0;
+}
+
+inpField.addEventListener("input", () => {
+  if (timeLeft > 0) {
+    typing();
+    initTyping();
+  } else {
+    inpField.value = "";
+  }
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  inpField.value = "";
+  randomParagraph();
+});
+
+tryAgainBtn.addEventListener("click", resetGame);
