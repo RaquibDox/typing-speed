@@ -43,6 +43,10 @@ body {
     /* word-break: break-all; */
 }
 
+.typing-text p span {
+    position: relative;
+}
+
 .typing-text p span.correct {
     color: rgb(9, 147, 9);
 }
@@ -52,6 +56,26 @@ body {
     background-color: #f5c2c7;
     outline: 1px solid rgb(253, 231, 231);
     border-radius: 4px;
+}
+
+.typing-text p span.active {
+    color: #f215fe;
+}
+.typing-text p span.active::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 100%;
+    opacity: 0;
+    background: #f215fe;
+    animation: blink 1s ease-in-out infinite;
+}
+@keyframes blink {
+    50%{
+        opacity: 1;
+    }
 }
 
 .content-box .content {

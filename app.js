@@ -1,7 +1,11 @@
 const typingText = document.querySelector(".typing-text p");
 inpField = document.querySelector(".input-field");
+mistakeTag = document.querySelector(".mistake span");
+timerTag = document.querySelector(".time span b");
 
-let charIndex = 0;
+let maxTime = 60;
+let timerStarted = false;
+let charIndex = (mistakes = lastInputIndex = 0);
 
 function randomParagraph() {
   let randIndex = Math.floor(Math.random() * paragraphs.length);
@@ -14,20 +18,41 @@ function randomParagraph() {
 }
 
 function initTyping() {
-  const characters = typingText.querySelectorAll("span");
-  4;
-  let typedChar = inpField.value.split("")[charIndex];
-  console.log(typedChar, characters[charIndex].innerText);
-  if (characters[charIndex].innerText === typedChar) {
-    characters[charIndex].classList.add("correct");
-    console.log("correct");
-  } else {
-    characters[charIndex].classList.add("incorrect");
-    console.log("wrong");
+  //the timer will start
+  if (!timerStarted) {
+    startTimer();
+    timerStarted = true;
   }
-  charIndex++;
-  characters[charIndex].classList.add("active");
   typing();
+
+  const characters = typingText.querySelectorAll("span");
+  let typedChar = inpField.value.split("")[lastInputIndex];
+
+  //this code will trigger while typing alphabets
+  if (lastInputIndex < inpField.value.split("").length) {
+    if (characters[charIndex].innerText === typedChar) {
+      characters[charIndex].classList.add("correct");
+    } else {
+      mistakes++;
+      characters[charIndex].classList.add("incorrect");
+    }
+    charIndex++;
+  }
+  //this code will trigger when you don't enter any letters.(examples: backspace)
+  else if (charIndex > 0) {
+    charIndex--;
+    if (characters[charIndex].classList.contains("incorrect")) {
+      mistakes--;
+    }
+    characters[charIndex].classList.remove("correct", "incorrect");
+  }
+
+  lastInputIndex = inpField.value.split("").length;
+
+  //moving the text cursor
+  characters.forEach((span) => span.classList.remove("active"));
+  characters[charIndex].classList.add("active");
+  mistakeTag.innerText = mistakes;
 }
 
 inpField.addEventListener("input", initTyping);
@@ -40,4 +65,14 @@ const audio = new Audio("one click.mp3");
 
 function typing() {
   audio.play();
+}
+
+function startTimer() {
+  let interval = setInterval(() => {
+    if (maxTime === 1) {
+      clearInterval(interval);
+    }
+    maxTime--;
+    timerTag.innerText = maxTime;
+  }, 1000);
 }
