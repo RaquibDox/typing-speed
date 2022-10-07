@@ -139,3 +139,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
 //resets when you press the button
 tryAgainBtn.addEventListener("click", resetGame);
+
+window.addEventListener("keypress", function (event) {
+  if (event.key === "Enter") {
+    resetGame();
+  }
+});
