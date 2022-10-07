@@ -12,16 +12,18 @@ let maxTime = 60,
   interval,
   timeLeft = maxTime,
   timerStarted = false,
-  charIndex = (mistakes = lastInputIndex = words = 0);
+  charIndex = (mistakes = size = lastInputIndex = words = 0);
 
 function randomParagraph() {
   let randIndex = Math.floor(Math.random() * paragraphs.length);
   typingText.innerHTML = "";
+  size = paragraphs[randIndex].split("").length;
   paragraphs[randIndex].split("").forEach((span) => {
     let spanTag = `<span>${span}</span>`;
     typingText.innerHTML += spanTag;
   });
   typingText.querySelectorAll("span")[0].classList.add("active");
+  scrollToCursor();
   document.addEventListener("keydown", () => inpField.focus());
   typingText.addEventListener("click", () => inpField.focus());
 }
@@ -60,6 +62,8 @@ function initTyping() {
   //moving the text cursor
   characters.forEach((span) => span.classList.remove("active"));
   characters[charIndex].classList.add("active");
+  scrollToCursor();
+
   let wpm = Math.round(
     ((charIndex - mistakes) / 5 / (maxTime - timeLeft)) * 60
   );
@@ -96,10 +100,16 @@ function resetGame() {
   mistakeTag.innerText = mistakes;
   wpmTag.innerText = 0;
   cpmTag.innerText = 0;
+  scrollToCursor();
+}
+
+function scrollToCursor() {
+  let activeCursor = document.querySelector(".active");
+  activeCursor.scrollIntoView(true);
 }
 
 inpField.addEventListener("input", () => {
-  if (timeLeft > 0) {
+  if (timeLeft > 0 && charIndex < size - 1) {
     typing();
     initTyping();
   } else {
