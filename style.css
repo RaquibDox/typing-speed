@@ -162,9 +162,12 @@ body {
     }
 
     .result-details li:not(:first-child){
-        border: none;
         padding: 0;
-        margin-top: 10px;
+        border: none;
+    }
+
+    .result-details li{
+        margin: 10px 0;
     }
 
     .content-box .typing-text{

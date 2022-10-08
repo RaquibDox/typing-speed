@@ -134,6 +134,7 @@ inpField.addEventListener("input", () => {
 //resets when you reload the page
 window.addEventListener("DOMContentLoaded", () => {
   inpField.value = "";
+  inpField.focus();
   randomParagraph();
 });
 
