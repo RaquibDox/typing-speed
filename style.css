@@ -12,21 +12,21 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background: #071013;
+    background: #1c1c1c;
 }
 
 .wrapper {
     max-width: 770px;
     padding: 2rem;
     margin: 2rem;
-    background: #dfe0e2;
+    background: #333234;
     border-radius: 1rem;
 }
 
 .wrapper .content-box {
     padding: 13px 20px 0;
     border-radius: 10px;
-    border: 1px solid #aaa;
+    border: 1px solid rgb(37, 36, 36);
 }
 .wrapper .input-field{
     z-index: -999;
@@ -52,21 +52,22 @@ body {
 
 .typing-text p span {
     position: relative;
+    color: #7b7b7b;
 }
 
 .typing-text p span.correct {
-    color: rgb(9, 147, 9);
+    color: rgb(255, 255, 255);
 }
 
 .typing-text p span.incorrect {
-    color: red;
-    background-color: #f5c2c7;
-    outline: 1px solid rgb(253, 231, 231);
+    color: rgb(241, 89, 89);
+    /* background-color: #9e8285;
+    outline: 1px solid rgb(81, 8, 8); */
     border-radius: 4px;
 }
 
 .typing-text p span.active {
-    color: #f215fe;
+    color: #dab914;
 }
 .typing-text p span.active::before{
     content: "";
@@ -76,7 +77,7 @@ body {
     height: 2px;
     width: 100%;
     opacity: 0;
-    background: #f215fe;
+    background: #dab914;
     animation: blink 1s ease-in-out infinite;
 }
 @keyframes blink {
@@ -89,9 +90,10 @@ body {
     display: flex;
     margin-top: 17px;
     padding: 12px 0;
-    border-top: 1px solid #aaa;
+    border-top: 1px solid rgb(37, 36, 36);
     justify-content: space-between;
     align-items: center;
+    color: #e4e4e4;
 }
 
 .content button {
@@ -99,9 +101,9 @@ body {
     outline: none;
     width: 105px;
     padding: 8px 0;
-    background: #eb5160;
+    background: #dab914;
     border-radius: 5px;
-    color: #dfe0e2;
+    color: #333234;
     cursor: pointer;
     font-weight: bolder;
     font-size: 16px;
@@ -127,7 +129,7 @@ body {
 
 .result-details li:not(:first-child) {
     padding-left: 22px;
-    border-left: 1px solid #aaa;
+    border-left: 1px solid rgb(37, 36, 36);
 }
 
 .result-details li span {
