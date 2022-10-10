@@ -12,3 +12,26 @@ const paragraphs = [
   "Dave watched as the forest burned up on the hill, only a few miles from her house. The car had been hastily packed and Marta was inside trying to round up the last of the pets. Dave went through his mental list of the most important papers and documents that they couldn't leave behind. He scolded himself for not having prepared these better in advance and hoped that he had remembered everything that was needed. He continued to wait for Marta to appear with the pets, but she still was nowhere to be seen.",
   "As she sat watching the world go by, something caught her eye. It wasn't so much its color or shape, but the way it was moving. She squinted to see if she could better understand what it was and where it was going, but it didn't help. As she continued to stare into the distance, she didn't understand why this uneasiness was building inside her body. She felt like she should get up and run. If only she could make out what it was. At that moment, she comprehended what it was and where it was heading, and she knew her life would never be the same.",
 ];
+
+let paraSpan = [];
+
+function extendParagraph(index) {
+  let allParagraph = "";
+  console.log("Extending paragraph...");
+  //size += paragraphs[randIndex].split("").length;
+  paragraphs[index].split("").forEach((span) => {
+    //removing everything except letters
+    if (span.toLowerCase() != span.toUpperCase() || span === " ") {
+      let spanTag = `<span>${span.toLowerCase()}</span>`;
+      allParagraph += spanTag;
+    }
+  });
+  //console.log(allParagraph);
+  paraSpan.push(allParagraph);
+}
+
+for (let i = 0; i < paragraphs.length; i++) {
+  extendParagraph(i);
+}
+
+console.log(paraSpan);

@@ -148,6 +148,11 @@ body {
     .content-box .content {
         flex-direction: column;
     }
+
+    .typing-text p {
+        font-size: 21px;
+        text-align: left;
+    }
 /* 
     .content-box .content{
         border-bottom: 1px solid #aaa;
