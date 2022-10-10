@@ -12,17 +12,18 @@ let maxTime = 60,
   interval,
   timeLeft = maxTime,
   timerStarted = false,
-  charIndex = (mistakes = size = lastInputIndex = words = 0);
+  size = 300,
+  charIndex = (mistakes = lastInputIndex = words = 0);
 
 //this function randomly calls a paragraph and show it in the view
 function randomParagraph() {
   let randIndex = Math.floor(Math.random() * paragraphs.length);
   typingText.innerHTML = "";
-  size = paragraphs[randIndex].split("").length;
+  //size = paragraphs[randIndex].split("").length;
   paragraphs[randIndex].split("").forEach((span) => {
     //removing everything except letters
     if (span.toLowerCase() != span.toUpperCase() || span === " ") {
-      let spanTag = `<span>${span}</span>`;
+      let spanTag = `<span>${span.toLowerCase()}</span>`;
       typingText.innerHTML += spanTag;
     }
   });
@@ -30,6 +31,20 @@ function randomParagraph() {
   scrollToCursor();
   document.addEventListener("keydown", () => inpField.focus());
   typingText.addEventListener("click", () => inpField.focus());
+}
+
+function extendParagraph() {
+  console.log("Extending paragraph...");
+  let randIndex = Math.floor(Math.random() * paragraphs.length);
+  //typingText.innerHTML = "";
+  size += paragraphs[randIndex].split("").length;
+  paragraphs[randIndex].split("").forEach((span) => {
+    //removing everything except letters
+    if (span.toLowerCase() != span.toUpperCase() || span === " ") {
+      let spanTag = `<span>${span.toLowerCase()}</span>`;
+      typingText.innerHTML += spanTag;
+    }
+  });
 }
 
 //the main function calling all other functions(everything happens here)
@@ -68,25 +83,12 @@ function initTyping() {
   characters.forEach((span) => span.classList.remove("active"));
   characters[charIndex].classList.add("active");
   scrollToCursor();
-}
 
-//for typing sound
-function typing() {
-  audio.play();
-}
-
-//starts the timer and also switch it offs automatically after time runs out
-function startTimer() {
-  interval = setInterval(() => {
-    if (timeLeft <= 1) {
-      clearInterval(interval);
-      inpField.value = "";
-      updateTags();
-    }
-    timeLeft--;
-    timerTag.innerText = timeLeft;
-    updateTags();
-  }, 1000);
+  if (size === charIndex + 200) {
+    typingText.innerHTML += `<span> </span>`;
+    size++;
+    extendParagraph();
+  }
 }
 
 //resets everything and brings a new paragraph
@@ -119,6 +121,25 @@ function updateTags() {
 function scrollToCursor() {
   let activeCursor = document.querySelector(".active");
   activeCursor.scrollIntoView(true);
+}
+
+//for typing sound
+function typing() {
+  audio.play();
+}
+
+//starts the timer and also switch it offs automatically after time runs out
+function startTimer() {
+  interval = setInterval(() => {
+    if (timeLeft <= 1) {
+      clearInterval(interval);
+      inpField.value = "";
+      updateTags();
+    }
+    timeLeft--;
+    timerTag.innerText = timeLeft;
+    updateTags();
+  }, 1000);
 }
 
 //activates when you type something
