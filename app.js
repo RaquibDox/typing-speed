@@ -12,21 +12,16 @@ let maxTime = 60,
   interval,
   timeLeft = maxTime,
   timerStarted = false,
-  size = 300,
+  letterProvided = true,
+  size = 0,
   charIndex = (mistakes = lastInputIndex = words = 0);
 
 //this function randomly calls a paragraph and show it in the view
 function randomParagraph() {
-  let randIndex = Math.floor(Math.random() * paragraphs.length);
+  let randIndex = Math.floor(Math.random() * paraSpan.length);
   typingText.innerHTML = "";
-  //size = paragraphs[randIndex].split("").length;
-  paragraphs[randIndex].split("").forEach((span) => {
-    //removing everything except letters
-    if (span.toLowerCase() != span.toUpperCase() || span === " ") {
-      let spanTag = `<span>${span.toLowerCase()}</span>`;
-      typingText.innerHTML += spanTag;
-    }
-  });
+  size = paragraphs[randIndex].split("").length; //letter content size is approximately same in paragraphs and paraSpan
+  typingText.innerHTML = paraSpan[randIndex];
   typingText.querySelectorAll("span")[0].classList.add("active");
   scrollToCursor();
   document.addEventListener("keydown", () => inpField.focus());
@@ -34,17 +29,9 @@ function randomParagraph() {
 }
 
 function extendParagraph() {
-  console.log("Extending paragraph...");
-  let randIndex = Math.floor(Math.random() * paragraphs.length);
-  //typingText.innerHTML = "";
-  size += paragraphs[randIndex].split("").length;
-  paragraphs[randIndex].split("").forEach((span) => {
-    //removing everything except letters
-    if (span.toLowerCase() != span.toUpperCase() || span === " ") {
-      let spanTag = `<span>${span.toLowerCase()}</span>`;
-      typingText.innerHTML += spanTag;
-    }
-  });
+  let randIndex = Math.floor(Math.random() * paraSpan.length);
+  size += paragraphs[randIndex].split("").length; //letter content size is approximately same in paragraphs and paraSpan
+  typingText.innerHTML += paraSpan[randIndex];
 }
 
 //the main function calling all other functions(everything happens here)
@@ -67,9 +54,11 @@ function initTyping() {
       characters[charIndex].classList.add("incorrect");
     }
     charIndex++;
+    letterProvided = true;
   }
   //this code will trigger when you don't enter any letters.(examples: backspace)
-  else if (charIndex > 0) {
+  else if (charIndex > 0 && letterProvided) {
+    letterProvided = false;
     charIndex--;
     if (characters[charIndex].classList.contains("incorrect")) {
       mistakes--;
@@ -84,7 +73,8 @@ function initTyping() {
   characters[charIndex].classList.add("active");
   scrollToCursor();
 
-  if (size === charIndex + 200) {
+  //this triggers when the paragraph is required to be extended
+  if (size === charIndex + 150) {
     typingText.innerHTML += `<span> </span>`;
     size++;
     extendParagraph();

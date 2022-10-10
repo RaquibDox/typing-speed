@@ -15,10 +15,8 @@ const paragraphs = [
 
 let paraSpan = [];
 
-function extendParagraph(index) {
+function createParagraphSpan(index) {
   let allParagraph = "";
-  console.log("Extending paragraph...");
-  //size += paragraphs[randIndex].split("").length;
   paragraphs[index].split("").forEach((span) => {
     //removing everything except letters
     if (span.toLowerCase() != span.toUpperCase() || span === " ") {
@@ -26,12 +24,9 @@ function extendParagraph(index) {
       allParagraph += spanTag;
     }
   });
-  //console.log(allParagraph);
   paraSpan.push(allParagraph);
 }
 
 for (let i = 0; i < paragraphs.length; i++) {
-  extendParagraph(i);
+  createParagraphSpan(i);
 }
-
-console.log(paraSpan);
