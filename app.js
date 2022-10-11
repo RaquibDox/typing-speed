@@ -14,8 +14,7 @@ let maxTime = 40,
   timeLeft = maxTime,
   timerStarted = false,
   letterProvided = true,
-  size = 0,
-  charIndex = (mistakes = lastInputIndex = words = 0);
+  charIndex = (mistakes = reduceMistake = size = lastInputIndex = words = 0);
 
 //this function randomly calls a paragraph and show it in the view
 function randomParagraph() {
@@ -62,6 +61,9 @@ function initTyping() {
   else if (charIndex > 0 && letterProvided) {
     charIndex--;
     if (characters[charIndex].classList.contains("incorrect")) {
+      if (characters[charIndex].innerText === " ") {
+        reduceMistake--;
+      }
       mistakes--;
     } else {
       letterProvided = false;
@@ -84,13 +86,14 @@ function initTyping() {
 
 //this is a function to skip to the next space in the paragraph
 function skipSpace() {
+  reduceMistake++;
   const characters = typingText.querySelectorAll("span");
   do {
     charIndex++;
     mistakes++;
     characters[charIndex - 1].classList.add("incorrect");
   } while (characters[charIndex - 1].innerText !== " ");
-  mistakes--;
+  //mistakes--;
   characters.forEach((span) => span.classList.remove("active"));
   characters[charIndex].classList.add("active");
   scrollToCursor();
@@ -102,7 +105,7 @@ function resetGame() {
   timeLeft = maxTime;
   timerStarted = false;
   clearInterval(interval);
-  charIndex = mistakes = lastInputIndex = words = 0;
+  charIndex = mistakes = reduceMistake = lastInputIndex = words = 0;
   timerTag.innerText = timeLeft;
   mistakeTag.innerText = mistakes;
   wpmTag.innerText = 0;
@@ -117,7 +120,7 @@ function updateTags() {
   );
   wpm = wpm < 0 || !wpm || wpm === Infinity ? 0 : wpm;
 
-  mistakeTag.innerText = mistakes;
+  mistakeTag.innerText = mistakes - reduceMistake;
   cpmTag.innerText = wpm * 5;
   wpmTag.innerText = wpm;
 }
