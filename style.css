@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap'); */
 *{
     margin: 0;
     padding: 0;
@@ -39,6 +39,7 @@ body {
     max-height: 100px;
     overflow-x: hidden;
     overflow-y: auto;
+    /* overflow: hidden; */
 }
 
 .typing-text::-webkit-scrollbar {
@@ -54,7 +55,7 @@ body {
 
 .typing-text p span {
     position: relative;
-    color: #7b7b7b;
+    color: #828181;
 }
 
 .typing-text p span.correct {

@@ -1,4 +1,5 @@
 const typingText = document.querySelector(".typing-text p"),
+  typingTextContainer = document.querySelector(".typing-text"),
   inpField = document.querySelector(".input-field"),
   mistakeTag = document.querySelector(".mistake span"),
   timerTag = document.querySelector(".time span b"),
@@ -8,7 +9,7 @@ const typingText = document.querySelector(".typing-text p"),
 
 const audio = new Audio("one click.mp3");
 
-let maxTime = 60,
+let maxTime = 40,
   interval,
   timeLeft = maxTime,
   timerStarted = false,
@@ -49,19 +50,21 @@ function initTyping() {
   if (lastInputIndex < inpField.value.split("").length) {
     if (characters[charIndex].innerText === typedChar) {
       characters[charIndex].classList.add("correct");
+      letterProvided = false;
     } else {
       mistakes++;
       characters[charIndex].classList.add("incorrect");
+      letterProvided = true;
     }
     charIndex++;
-    letterProvided = true;
   }
   //this code will trigger when you don't enter any letters.(examples: backspace)
   else if (charIndex > 0 && letterProvided) {
-    letterProvided = false;
     charIndex--;
     if (characters[charIndex].classList.contains("incorrect")) {
       mistakes--;
+    } else {
+      letterProvided = false;
     }
     characters[charIndex].classList.remove("correct", "incorrect");
   }
@@ -73,12 +76,24 @@ function initTyping() {
   characters[charIndex].classList.add("active");
   scrollToCursor();
 
-  //this triggers when the paragraph is required to be extended
-  if (size === charIndex + 150) {
-    typingText.innerHTML += `<span> </span>`;
-    size++;
-    extendParagraph();
+  //this code triggers when you hit space in between words
+  if (typedChar === " " && characters[charIndex - 1].innerText !== " ") {
+    skipSpace();
   }
+}
+
+//this is a function to skip to the next space in the paragraph
+function skipSpace() {
+  const characters = typingText.querySelectorAll("span");
+  do {
+    charIndex++;
+    mistakes++;
+    characters[charIndex - 1].classList.add("incorrect");
+  } while (characters[charIndex - 1].innerText !== " ");
+  mistakes--;
+  characters.forEach((span) => span.classList.remove("active"));
+  characters[charIndex].classList.add("active");
+  scrollToCursor();
 }
 
 //resets everything and brings a new paragraph
@@ -103,7 +118,7 @@ function updateTags() {
   wpm = wpm < 0 || !wpm || wpm === Infinity ? 0 : wpm;
 
   mistakeTag.innerText = mistakes;
-  cpmTag.innerText = charIndex - mistakes;
+  cpmTag.innerText = wpm * 5;
   wpmTag.innerText = wpm;
 }
 
@@ -125,10 +140,18 @@ function startTimer() {
       clearInterval(interval);
       inpField.value = "";
       updateTags();
+      cpmTag.innerText = Math.round((charIndex - mistakes) * (60 / maxTime));
     }
     timeLeft--;
     timerTag.innerText = timeLeft;
     updateTags();
+
+    //this triggers when the paragraph is required to be extended
+    if (size <= charIndex + 250) {
+      typingText.innerHTML += `<span> </span>`;
+      size++;
+      extendParagraph();
+    }
   }, 1000);
 }
 
@@ -146,6 +169,7 @@ inpField.addEventListener("input", () => {
 window.addEventListener("DOMContentLoaded", () => {
   inpField.value = "";
   inpField.focus();
+  timerTag.innerText = maxTime;
   randomParagraph();
 });
 
