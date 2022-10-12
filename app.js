@@ -17,7 +17,8 @@ let maxTime = 40,
   interval,
   timeLeft = maxTime,
   timerStarted = false,
-  letterProvided = true,
+  typo = true,
+  letterProvided = false,
   charIndex = (mistakes = reduceMistake = size = lastInputIndex = 0);
 
 //this function randomly calls a paragraph and show it in the view
@@ -32,6 +33,7 @@ function randomParagraph() {
   typingText.addEventListener("click", () => inpField.focus());
 }
 
+//this function is to extend the paragraph if the user almost completed typing the entire paragraph
 function extendParagraph() {
   let randIndex = Math.floor(Math.random() * paraSpan.length);
   size += paragraphs[randIndex].split("").length; //letter content size is approximately same in paragraphs and paraSpan
@@ -53,18 +55,24 @@ function initTyping() {
 
   //this code will trigger while typing alphabets
   if (lastInputIndex < inpField.value.split("").length) {
+    if (typedChar !== " ") {
+      letterProvided = true;
+    } else if (!letterProvided && typedChar === " ") {
+      lastInputIndex = inpField.value.split("").length;
+      return;
+    }
     if (characters[charIndex].innerText === typedChar) {
       characters[charIndex].classList.add("correct");
-      letterProvided = false;
+      typo = false;
     } else {
       mistakes++;
       characters[charIndex].classList.add("incorrect");
-      letterProvided = true;
+      typo = true;
     }
     charIndex++;
   }
   //this code will trigger when you don't enter any letters.(examples: backspace)
-  else if (charIndex > 0 && letterProvided) {
+  else if (charIndex > 0 && typo) {
     charIndex--;
     if (characters[charIndex].classList.contains("incorrect")) {
       if (characters[charIndex].innerText === " ") {
@@ -72,7 +80,7 @@ function initTyping() {
       }
       mistakes--;
     } else {
-      letterProvided = false;
+      typo = false;
     }
     characters[charIndex].classList.remove("correct", "incorrect");
   }
@@ -85,13 +93,18 @@ function initTyping() {
   scrollToCursor();
 
   //this code triggers when you hit space in between words
-  if (typedChar === " " && characters[charIndex - 1].innerText !== " ") {
+  if (
+    typedChar === " " &&
+    characters[charIndex - 1].innerText !== " " &&
+    letterProvided
+  ) {
     skipSpace();
   }
 }
 
 //this is a function to skip to the next space in the paragraph
 function skipSpace() {
+  letterProvided = false;
   reduceMistake++;
   const characters = typingText.querySelectorAll("span");
   do {
@@ -112,7 +125,7 @@ function resetGame() {
   randomParagraph();
   timeLeft = maxTime;
   timerStarted = false;
-  letterProvided = true;
+  typo = true;
   clearInterval(interval);
   charIndex = mistakes = reduceMistake = lastInputIndex = 0;
   timerTag.innerText = timeLeft;
