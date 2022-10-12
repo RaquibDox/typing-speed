@@ -1,11 +1,15 @@
 const typingText = document.querySelector(".typing-text p"),
   typingTextContainer = document.querySelector(".typing-text"),
+  testOver = document.querySelector(".test-over"),
   inpField = document.querySelector(".input-field"),
   mistakeTag = document.querySelector(".mistake span"),
+  mistakeOverTag = document.querySelector(".mistake-over span"),
   timerTag = document.querySelector(".time span b"),
   wpmTag = document.querySelector(".wpm span"),
   cpmTag = document.querySelector(".cpm span"),
-  tryAgainBtn = document.querySelector("button");
+  wpmOverTag = document.querySelector(".wpm-over span"),
+  tryAgainBtn = document.querySelector(".content button"),
+  tryAgainOverBtn = testOver.querySelector("button");
 
 const audio = new Audio("one click.mp3");
 
@@ -103,6 +107,7 @@ function skipSpace() {
 
 //resets everything and brings a new paragraph
 function resetGame() {
+  testOver.classList.add("visible");
   inpField.value = "";
   randomParagraph();
   timeLeft = maxTime;
@@ -148,6 +153,9 @@ function startTimer() {
       inpField.value = "";
       updateTags();
       cpmTag.innerText = Math.round((charIndex - mistakes) * (60 / maxTime));
+      mistakeOverTag.innerText = mistakeTag.innerText;
+      wpmOverTag.innerText = wpmTag.innerText;
+      testOver.classList.toggle("visible");
     }
     timeLeft--;
     timerTag.innerText = timeLeft;
@@ -182,6 +190,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 //resets when you press the button
 tryAgainBtn.addEventListener("click", resetGame);
+tryAgainOverBtn.addEventListener("click", resetGame);
 
 window.addEventListener("keypress", function (event) {
   if (event.key === "Enter") {
