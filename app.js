@@ -60,6 +60,8 @@ function initTyping() {
     } else if (!letterProvided && typedChar === " ") {
       lastInputIndex = inpField.value.split("").length;
       return;
+    } else if (characters[charIndex].innerText === " ") {
+      letterProvided = false;
     }
     if (characters[charIndex].innerText === typedChar) {
       characters[charIndex].classList.add("correct");
