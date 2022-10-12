@@ -14,7 +14,7 @@ let maxTime = 40,
   timeLeft = maxTime,
   timerStarted = false,
   letterProvided = true,
-  charIndex = (mistakes = reduceMistake = size = lastInputIndex = words = 0);
+  charIndex = (mistakes = reduceMistake = size = lastInputIndex = 0);
 
 //this function randomly calls a paragraph and show it in the view
 function randomParagraph() {
@@ -44,6 +44,8 @@ function initTyping() {
 
   const characters = typingText.querySelectorAll("span");
   let typedChar = inpField.value.split("")[lastInputIndex];
+
+  //console.log(typedChar, characters[charIndex].innerText);
 
   //this code will trigger while typing alphabets
   if (lastInputIndex < inpField.value.split("").length) {
@@ -101,11 +103,13 @@ function skipSpace() {
 
 //resets everything and brings a new paragraph
 function resetGame() {
+  inpField.value = "";
   randomParagraph();
   timeLeft = maxTime;
   timerStarted = false;
+  letterProvided = true;
   clearInterval(interval);
-  charIndex = mistakes = reduceMistake = lastInputIndex = words = 0;
+  charIndex = mistakes = reduceMistake = lastInputIndex = 0;
   timerTag.innerText = timeLeft;
   mistakeTag.innerText = mistakes;
   wpmTag.innerText = 0;

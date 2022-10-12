@@ -201,5 +201,6 @@ body {
 
     .wrapper .content-box {
         padding: 13px 10px 0 10px;
+        border: none;
     }
 }
