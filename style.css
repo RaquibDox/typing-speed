@@ -87,9 +87,18 @@ body {
     padding: 5px 10px 5px 5px;
     max-height: 100px;
     overflow-x: hidden;
-    overflow-y: auto;
+    /* overflow-y: auto; */
+    overflow-y: scroll;
     /* overflow: hidden; */
 }
+
+.content-box:focus {
+    outline: none;
+  }
+
+.typing-text:focus {
+    outline: none;
+  }
 
 .typing-text::-webkit-scrollbar {
     width: 0;
@@ -99,6 +108,7 @@ body {
     font-size: 21px;
     text-align: justify;
     letter-spacing: 1px;
+    overflow-y: scroll;
     /* word-break: break-all; */
 }
 

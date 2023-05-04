@@ -13,7 +13,7 @@ const typingText = document.querySelector(".typing-text p"),
 
 const audio = new Audio("one click.mp3");
 
-let maxTime = 40,
+let maxTime = 30,
   interval,
   timeLeft = maxTime,
   timerStarted = false,
@@ -152,7 +152,7 @@ function updateTags() {
 //scrolls the lines according to the text cursor
 function scrollToCursor() {
   let activeCursor = document.querySelector(".active");
-  activeCursor.scrollIntoView(true);
+  activeCursor.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
 }
 
 //for typing sound
